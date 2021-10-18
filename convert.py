@@ -82,8 +82,8 @@ def Json2Xml(json_path, save_path):
 
 
 def Batch2Xmls(easydl_folder, save_path):
-    img_save_folder = osp.join(save_path, "imgs")
-    xml_save_folder = osp.join(save_path, "xmls")
+    img_save_folder = osp.join(save_path, "images")
+    xml_save_folder = osp.join(save_path, "annotations")
     mkdir_p(save_path)
     mkdir_p(img_save_folder)
     mkdir_p(xml_save_folder)
