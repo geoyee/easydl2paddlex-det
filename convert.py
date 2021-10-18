@@ -9,7 +9,7 @@ from PIL import Image
 from utils import *
 
 
-def WriteXml(xml_path, name=None, js_data=None, hw=None):
+def WriteXml(xml_path, name, js_data=None, hw=None):
     # 开始
     doc = minidom.Document()
     root_node = doc.createElement("annotation")
@@ -23,7 +23,7 @@ def WriteXml(xml_path, name=None, js_data=None, hw=None):
     filename_node.appendChild(filename_value)
     root_node.appendChild(filename_node)
     size_node = doc.createElement("size")
-    if hw is None and name is not None and js_data is not None:
+    if js_data is not None:
         W = js_data["labels"][0]["size"]["width"]
         H = js_data["labels"][0]["size"]["height"]
         for item, value in zip(["width", "height", "depth"], [W, H, 3]):
@@ -58,7 +58,7 @@ def WriteXml(xml_path, name=None, js_data=None, hw=None):
                 bndbox_node.appendChild(elem)
             obj_node.appendChild(bndbox_node)
             root_node.appendChild(obj_node)
-    elif hw is None:
+    elif hw is not None:
         H, W = hw
         for item, value in zip(["width", "height", "depth"], [W, H, 3]):
             elem = doc.createElement(item)
@@ -78,12 +78,13 @@ def Json2Xml(json_path, save_path):
     name = get_file_name(json_path)
     xml_path = osp.join(save_path, (name.replace(".json", ".xml")))
     js_data = read_json(json_path)
-    WriteXml(xml_path, name, js_data)
+    WriteXml(xml_path, name.replace(".json", ".jpg"), js_data)
 
 
 def Batch2Xmls(easydl_folder, save_path):
     img_save_folder = osp.join(save_path, "imgs")
     xml_save_folder = osp.join(save_path, "xmls")
+    mkdir_p(save_path)
     mkdir_p(img_save_folder)
     mkdir_p(xml_save_folder)
     names = os.listdir(easydl_folder)
@@ -101,7 +102,7 @@ def Batch2Xmls(easydl_folder, save_path):
                 xml_path = osp.join(xml_save_folder, name.replace(".jpg", ".xml"))
                 img = np.asarray(Image.open(img_path))
                 h, w = img.shape[:2]
-                WriteXml(xml_path, None, None, hw=(h, w))
+                WriteXml(xml_path, name, hw=(h, w))
 
 
 parser = argparse.ArgumentParser(description="easydl folder and save folder")
