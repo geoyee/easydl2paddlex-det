@@ -1,4 +1,5 @@
 # easydl2paddlex-det
+
 easydl json to paddlex voc [detection]
 
 ## 准备
@@ -23,7 +24,8 @@ save_path = r"test\datasets"
 Batch2Xmls(easydl_folder, save_path)
 ```
 
-## 功能
+## TODO
 
 - [x] 未标注数据生成不含object的xml标签。
-- [ ] 适应jpg以外的图像数据。
+- [x] 适应jpg以外的图像数据。
+- [x] 适应json中不存在size，从图像读取size。
